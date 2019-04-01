@@ -1,0 +1,25 @@
+.waypoints-form {
+  position: absolute;
+  left: -300px;
+  top: 0px;
+  .form-group {
+    .waypoints-form-input {
+      margin-bottom: 40px;
+      text-overflow: ellipsis;
+      width: 250px;
+    }
+  }
+  .input-group {
+    .form-control {
+      cursor: pointer;
+      text-overflow: ellipsis;
+      width: 250px;
+    }
+    .input-group-append {
+      .btn {
+        border-color: #ccc;
+        border-left: none;
+      }
+    }
+  }
+}
