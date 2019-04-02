@@ -76,7 +76,7 @@ class MapContainer extends Component {
         containerStyle={{
           border: '1px solid #ccc',
           borderRadius: '5px',
-          height: '100vh',
+          height: '800px',
           position: 'relative',
         }}
         gestureHandling="greedy"

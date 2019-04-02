@@ -23,3 +23,29 @@
     }
   }
 }
+
+// Small devices (landscape phones, less than 768px)
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .waypoints-form {
+    left: auto;
+    right: auto;
+    top: 820px;
+  }
+}
+
+// Medium devices (tablets, less than 992px)
+@media (min-width: 768px) and (max-width: 991.98px){
+  .waypoints-form {
+    left: -250px;
+    .form-group {
+      .waypoints-form-input {
+        width: 200px;
+      }
+    }
+    .input-group {
+      .form-control {
+        width: 200px;
+      }
+    }
+  }
+}

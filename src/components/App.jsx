@@ -17,7 +17,7 @@ const App = () => (
     <Container>
       <Row>
         <Col />
-        <Col sm={9}><MapContainer /></Col>
+        <Col md={8} xl={9}><MapContainer /></Col>
       </Row>
     </Container>
   </>
