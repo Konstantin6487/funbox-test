@@ -73,10 +73,14 @@ class MapContainer extends Component {
       showingInfoWindow,
       updateLocations,
     } = this.props;
-    const initialCenter = isEmpty(locations) ? undefined : { ...last(locations).position };
+
+    const initialCenter = isEmpty(locations)
+      ? undefined
+      : { ...last(locations).position };
+
     return (
       <Map
-        centerAroundCurrentLocation
+        centerAroundCurrentLocation={!!navigator}
         className="map"
         containerStyle={{
           border: '1px solid #ccc',

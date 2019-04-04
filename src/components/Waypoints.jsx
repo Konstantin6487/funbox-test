@@ -42,7 +42,7 @@ export default class Waypoints extends PureComponent {
     updateLocations(updatedLocations);
   };
 
-  showHideError = () => {
+  displayErrorMessage = () => {
     const { changeErrorMessageDisplay } = this.props;
     changeErrorMessageDisplay();
     setTimeout(changeErrorMessageDisplay, 5000);
@@ -54,8 +54,11 @@ export default class Waypoints extends PureComponent {
     searchbox.addListener('places_changed', () => {
       const { map } = this.props;
       const place = searchbox.getPlaces();
+      if (!place) {
+        return;
+      }
       if (!place[0]) {
-        this.showHideError();
+        this.displayErrorMessage();
         return;
       }
       if (place[0].geometry.viewport) {
