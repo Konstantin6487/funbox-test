@@ -12,7 +12,7 @@ import './app.scss';
 const App = () => (
   <>
     <Navbar className="shadow" bg="primary" variant="dark">
-      <Navbar.Brand href="http://github.com" title="Исходный код">Редактор маршрутов➢</Navbar.Brand>
+      <Navbar.Brand href="https://github.com/Konstantin6487/funbox-test" title="Исходный код">Редактор маршрутов➢</Navbar.Brand>
     </Navbar>
     <Container>
       <Row>

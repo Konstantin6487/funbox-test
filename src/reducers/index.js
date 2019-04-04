@@ -13,7 +13,12 @@ const reducers = combineReducers({
   locationsUi,
 });
 
-const localStorageData = JSON.parse(localStorage.getItem('locations'));
+const getStorageData = (storageStub) => {
+  const storage = storageStub || localStorage;
+  const dataFromStorage = storage.getItem('locations');
+  const parsed = JSON.parse(dataFromStorage);
+  return parsed;
+};
 
 /* eslint-disable */
 const composeEnhancers = typeof window === 'object' &&
@@ -23,6 +28,6 @@ const composeEnhancers = typeof window === 'object' &&
 
 export default createStore(
   reducers,
-  localStorageData || {},
-  composeEnhancers(applyMiddleware(saver)),
+  getStorageData() || {},
+  composeEnhancers(applyMiddleware(saver())),
 );

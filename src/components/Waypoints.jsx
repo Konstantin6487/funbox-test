@@ -1,12 +1,8 @@
 import React, { PureComponent, createRef } from 'react';
-import {
-  Button,
-  Form,
-  InputGroup,
-  Overlay,
-  Tooltip,
-} from 'react-bootstrap';
+import { Form, Overlay, Tooltip } from 'react-bootstrap';
 import update from 'immutability-helper';
+
+import PointsList from './PointsList';
 
 import './waypoints.scss';
 
@@ -27,6 +23,25 @@ export default class Waypoints extends PureComponent {
     removeLocation(id);
   }
 
+  onDragStart = index => (e) => {
+    const { locations } = this.props;
+    this.draggedItem = locations[index];
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.target.parentNode);
+    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+  };
+
+  onDragOver = index => () => {
+    const { locations, updateLocations } = this.props;
+    const draggedOverItem = locations[index];
+    if (this.draggedItem.id === draggedOverItem.id) {
+      return;
+    }
+    const passedLocations = locations.filter(location => location.id !== this.draggedItem.id);
+    const updatedLocations = update(passedLocations, { $splice: [[index, 0, this.draggedItem]] });
+    updateLocations(updatedLocations);
+  };
+
   showHideError = () => {
     const { changeErrorMessageDisplay } = this.props;
     changeErrorMessageDisplay();
@@ -34,8 +49,8 @@ export default class Waypoints extends PureComponent {
   }
 
   renderSearchBox = () => {
-    const { addLocation, google } = this.props;
-    const searchbox = new google.maps.places.SearchBox(this.autocomplete.current);
+    const { addLocation, google: mapsApi } = this.props;
+    const searchbox = new mapsApi.maps.places.SearchBox(this.autocomplete.current);
     searchbox.addListener('places_changed', () => {
       const { map } = this.props;
       const place = searchbox.getPlaces();
@@ -61,24 +76,10 @@ export default class Waypoints extends PureComponent {
     });
   }
 
-  onDragStart = index => (e) => {
-    const { locations } = this.props;
-    this.draggedItem = locations[index];
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', e.target.parentNode);
-    e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
-  };
-
-  onDragOver = index => () => {
-    const { locations, updateLocations } = this.props;
-    const draggedOverItem = locations[index];
-    if (this.draggedItem.id === draggedOverItem.id) {
-      return;
-    }
-    const passedLocations = locations.filter(location => location.id !== this.draggedItem.id);
-    const updatedLocations = update(passedLocations, { $splice: [[index, 0, this.draggedItem]] });
-    updateLocations(updatedLocations);
-  };
+  setLocationCenter = position => () => {
+    const { map } = this.props;
+    map.setCenter(position);
+  }
 
   render() {
     const { locations, isShowingError } = this.props;
@@ -95,19 +96,13 @@ export default class Waypoints extends PureComponent {
           </Overlay>
           <Form.Control className="waypoints-form-input" v-model="location" ref={this.autocomplete} />
         </Form.Group>
-        {locations.map(({ id, address }, index) => (
-          <InputGroup key={id} onDragOver={this.onDragOver(index)} className="mb-3">
-            <Form.Control
-              draggable
-              onDragStart={this.onDragStart(index)}
-              placeholder={`№${index + 1}❘${address}`}
-              readOnly
-            />
-            <InputGroup.Append>
-              <Button title="Удалить локацию" variant="outline-secondary" onClick={this.handleClick(id)}>✘</Button>
-            </InputGroup.Append>
-          </InputGroup>
-        ))}
+        <PointsList
+          handleClick={this.handleClick}
+          onDragStart={this.onDragStart}
+          onDragOver={this.onDragOver}
+          setLocationCenter={this.setLocationCenter}
+          locations={locations}
+        />
       </Form>
     );
   }

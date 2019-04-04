@@ -13,17 +13,23 @@ import connectMapApi from '../connectMapApi';
 
 import './map-container.scss';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { mapsApi }) => ({
   activeMarker: selectors.getActiveMarker(state),
   isShowingError: selectors.getIsShowingErrorProp(state),
   locations: selectors.locationsSelector(state),
   selectedPlace: selectors.getSelectedPlace(state),
   showingInfoWindow: selectors.getShowingInfoWindow(state),
+  mapsApi,
 });
 
 @connect(mapStateToProps)
 @connectMapApi()
 class MapContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.mapsApi = props.mapsApi || props.google;
+  }
+
   onMapClicked = () => {
     const { showingInfoWindow, clickMap } = this.props;
     if (showingInfoWindow) {
@@ -39,11 +45,11 @@ class MapContainer extends Component {
   }
 
   onMarkerDragEnd = id => (coord) => {
-    const { changeLocation, google } = this.props;
+    const { changeLocation } = this.props;
     const { latLng } = coord;
     const lat = latLng.lat();
     const lng = latLng.lng();
-    const geocoder = new google.maps.Geocoder();
+    const geocoder = new this.mapsApi.maps.Geocoder();
     geocoder.geocode({ location: { lat, lng } }, (results, status) => {
       const address = status === 'OK' ? results[0].formatted_address : 'Unknown location';
       changeLocation({
@@ -60,7 +66,6 @@ class MapContainer extends Component {
       activeMarker,
       addLocation,
       changeErrorMessageDisplay,
-      google,
       isShowingError,
       locations,
       removeLocation,
@@ -80,7 +85,7 @@ class MapContainer extends Component {
           position: 'relative',
         }}
         gestureHandling="greedy"
-        google={google}
+        google={this.mapsApi}
         initialCenter={initialCenter}
         onClick={this.onMapClicked}
         zoom={10}
@@ -93,7 +98,7 @@ class MapContainer extends Component {
         <Waypoints
           addLocation={addLocation}
           changeErrorMessageDisplay={changeErrorMessageDisplay}
-          google={google}
+          google={this.mapsApi}
           isShowingError={isShowingError}
           locations={locations}
           removeLocation={removeLocation}
@@ -112,17 +117,20 @@ class MapContainer extends Component {
             strokeWeight: 5,
           }}
         />
-        {locations.map(({ address, id, position }) => (
-          <Marker
-            data-test="mark-test"
-            draggable
-            key={id}
-            name={address}
-            onClick={this.onMarkerClick}
-            onDragend={flip(this.onMarkerDragEnd(id))}
-            position={position}
-          />
-        ))}
+        {!isEmpty(locations)
+          ? locations.map(({ address, id, position }) => (
+            <Marker
+              data-test="mark-test"
+              draggable
+              key={id}
+              name={address}
+              onClick={this.onMarkerClick}
+              onDragend={flip(this.onMarkerDragEnd(id))}
+              position={position}
+            />
+          ))
+          : null
+        }
       </Map>
     );
   }
