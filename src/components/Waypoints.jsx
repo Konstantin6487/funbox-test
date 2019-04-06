@@ -1,5 +1,11 @@
 import React, { PureComponent, createRef } from 'react';
-import { Form, Overlay, Tooltip } from 'react-bootstrap';
+import {
+  Button,
+  Form,
+  InputGroup,
+  Overlay,
+  Tooltip,
+} from 'react-bootstrap';
 import update from 'immutability-helper';
 
 import PointsList from './PointsList';
@@ -21,6 +27,10 @@ export default class Waypoints extends PureComponent {
   handleClick = id => () => {
     const { removeLocation } = this.props;
     removeLocation(id);
+  }
+
+  handleClearInput = () => {
+    this.autocomplete.current.value = '';
   }
 
   onDragStart = index => (e) => {
@@ -97,7 +107,24 @@ export default class Waypoints extends PureComponent {
               </Tooltip>
             )}
           </Overlay>
-          <Form.Control className="waypoints-form-input" v-model="location" ref={this.autocomplete} />
+          <InputGroup>
+            <Form.Control
+              className="waypoints-form-input"
+              v-model="location"
+              ref={this.autocomplete}
+              placeholder="Любой географический объект"
+            />
+            <InputGroup.Append>
+              <Button
+                id="inputGroupAppend"
+                onClick={this.handleClearInput}
+                title="Очистить строку запроса"
+                variant="outline-secondary"
+              >
+              ❮
+              </Button>
+            </InputGroup.Append>
+          </InputGroup>
         </Form.Group>
         <PointsList
           handleClick={this.handleClick}
