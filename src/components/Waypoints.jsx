@@ -17,7 +17,6 @@ export default class Waypoints extends PureComponent {
 
   componentDidMount() {
     this.renderSearchBox();
-    this.autocomplete.current.focus();
   }
 
   handleSubmit = (e) => {
@@ -59,8 +58,8 @@ export default class Waypoints extends PureComponent {
   }
 
   renderSearchBox = () => {
-    const { addLocation, google: mapsApi } = this.props;
-    const searchbox = new mapsApi.maps.places.SearchBox(this.autocomplete.current);
+    const { addLocation, google } = this.props;
+    const searchbox = new google.maps.places.SearchBox(this.autocomplete.current);
     searchbox.addListener('places_changed', () => {
       const { map } = this.props;
       const place = searchbox.getPlaces();
@@ -109,6 +108,7 @@ export default class Waypoints extends PureComponent {
           </Overlay>
           <InputGroup>
             <Form.Control
+              autoFocus
               className="waypoints-form-input"
               v-model="location"
               ref={this.autocomplete}

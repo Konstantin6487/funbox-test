@@ -13,23 +13,17 @@ import connectMapApi from '../connectMapApi';
 
 import './map-container.scss';
 
-const mapStateToProps = (state, { mapsApi }) => ({
+const mapStateToProps = state => ({
   activeMarker: selectors.getActiveMarker(state),
   isShowingError: selectors.getIsShowingErrorProp(state),
   locations: selectors.locationsSelector(state),
   selectedPlace: selectors.getSelectedPlace(state),
   showingInfoWindow: selectors.getShowingInfoWindow(state),
-  mapsApi,
 });
 
 @connect(mapStateToProps)
 @connectMapApi()
 class MapContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.mapsApi = props.mapsApi || props.google;
-  }
-
   onMapClicked = () => {
     const { showingInfoWindow, clickMap } = this.props;
     if (showingInfoWindow) {
@@ -45,13 +39,17 @@ class MapContainer extends Component {
   }
 
   onMarkerDragEnd = id => (coord) => {
-    const { changeLocation } = this.props;
+    const { changeLocation, google } = this.props;
     const { latLng } = coord;
     const lat = latLng.lat();
     const lng = latLng.lng();
-    const geocoder = new this.mapsApi.maps.Geocoder();
+    const geocoder = new google.maps.Geocoder();
+
     geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-      const address = status === 'OK' ? results[0].formatted_address : 'Unknown location';
+      const address = status === 'OK'
+        ? results[0].formatted_address
+        : 'Unknown location';
+
       changeLocation({
         address,
         id,
@@ -66,6 +64,7 @@ class MapContainer extends Component {
       activeMarker,
       addLocation,
       changeErrorMessageDisplay,
+      google,
       isShowingError,
       locations,
       removeLocation,
@@ -80,7 +79,7 @@ class MapContainer extends Component {
 
     return (
       <Map
-        centerAroundCurrentLocation={!!navigator}
+        centerAroundCurrentLocation
         className="map"
         containerStyle={{
           border: '1px solid #ccc',
@@ -89,7 +88,7 @@ class MapContainer extends Component {
           position: 'relative',
         }}
         gestureHandling="greedy"
-        google={this.mapsApi}
+        google={google}
         initialCenter={initialCenter}
         onClick={this.onMapClicked}
         zoom={10}
@@ -102,7 +101,7 @@ class MapContainer extends Component {
         <Waypoints
           addLocation={addLocation}
           changeErrorMessageDisplay={changeErrorMessageDisplay}
-          google={this.mapsApi}
+          google={google}
           isShowingError={isShowingError}
           locations={locations}
           removeLocation={removeLocation}

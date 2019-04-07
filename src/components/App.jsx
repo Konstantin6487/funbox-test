@@ -9,15 +9,19 @@ import MapContainer from './MapContainer';
 
 import './app.scss';
 
-const App = props => (
+const App = () => (
   <>
     <Navbar className="shadow" bg="primary" variant="dark">
-      <Navbar.Brand href="https://github.com/Konstantin6487/funbox-test" title="Исходный код...">Редактор маршрутов°</Navbar.Brand>
+      <Navbar.Brand href="https://github.com/Konstantin6487/funbox-test" title="Исходный код...">
+        Редактор маршрутов°
+      </Navbar.Brand>
     </Navbar>
     <Container>
       <Row>
         <Col />
-        <Col md={8} xl={9}><MapContainer {...props} /></Col>
+        <Col md={8} xl={9}>
+          <MapContainer />
+        </Col>
       </Row>
     </Container>
   </>

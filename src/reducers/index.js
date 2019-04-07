@@ -13,9 +13,8 @@ const reducers = combineReducers({
   locationsUi,
 });
 
-const getStorageData = (storageStub) => {
-  const storage = storageStub || localStorage;
-  const dataFromStorage = storage.getItem('locations');
+const getStorageData = () => {
+  const dataFromStorage = localStorage.getItem('locations');
   const parsed = JSON.parse(dataFromStorage);
   return parsed;
 };
@@ -29,5 +28,5 @@ const composeEnhancers = typeof window === 'object' &&
 export default createStore(
   reducers,
   getStorageData() || {},
-  composeEnhancers(applyMiddleware(saver())),
+  composeEnhancers(applyMiddleware(saver)),
 );
