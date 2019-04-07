@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "webpack --mode production",
-    "eslint": "eslint"
+    "cypress": "cypress open",
+    "cypress:all": "cypress run"
   },
   "keywords": [],
   "author": "Konstantin Bochinin <Konstantin6487@rambler.ru>",
@@ -37,8 +38,10 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
+    "cypress": "^3.2.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-cypress": "^2.2.1",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",

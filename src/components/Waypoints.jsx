@@ -110,6 +110,7 @@ export default class Waypoints extends PureComponent {
             <Form.Control
               autoFocus
               className="waypoints-form-input"
+              data-test="waypoints"
               v-model="location"
               ref={this.autocomplete}
               placeholder="Любой географический объект"

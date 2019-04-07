@@ -1,17 +1,17 @@
 ---
+plugins:
+  - cypress
 
 extends:
   - airbnb
-  # - "plugin:jest/recommended"
   - "plugin:react/recommended"
-  # - "jest-enzyme"
 
 parser: babel-eslint
 
 env:
   browser: true
   node: true
-  # jest: true
+  cypress/globals: true
 
 rules:
   import/extensions: 0
