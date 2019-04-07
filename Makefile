@@ -1,4 +1,4 @@
-install: install-deps
+setup: install-deps
 
 start:
 	npm start
@@ -13,10 +13,10 @@ build:
 lint:
 	npx eslint . --ext .js --ext .jsx
 
-test:
+test-ui:
 	npm run cypress
 
-test-cli:
+test:
 	npm run cypress:all
 
 .PHONY: test
