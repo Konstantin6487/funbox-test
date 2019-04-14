@@ -2,7 +2,8 @@
 /node_modules
 
 # testing
-/cypress/videos
+/cypress/*
+!/cypress/integration
 
 # production
 /dist
