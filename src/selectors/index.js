@@ -10,3 +10,8 @@ export const locationsSelector = createSelector(
   getLocations,
   locations => Object.values(locations),
 );
+
+export const positionsSelector = createSelector(
+  locationsSelector,
+  locations => locations.map(({ position }) => position),
+);

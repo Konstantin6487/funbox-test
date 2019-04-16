@@ -1,4 +1,4 @@
-import React, { PureComponent, createRef } from 'react';
+import React, { Component, createRef } from 'react';
 import {
   Button,
   Form,
@@ -7,40 +7,41 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import update from 'immutability-helper';
+import { memoize } from 'lodash';
 
 import PointsList from './PointsList';
 
 import './waypoints.scss';
 
-export default class Waypoints extends PureComponent {
-  autocomplete = createRef();
-
+export default class Waypoints extends Component {
   componentDidMount() {
     this.renderSearchBox();
   }
+
+  autocomplete = createRef();
 
   handleSubmit = (e) => {
     e.preventDefault();
   }
 
-  handleClick = id => () => {
+  handleClick = memoize(id => () => {
     const { removeLocation } = this.props;
     removeLocation(id);
-  }
+  })
 
   handleClearInput = () => {
     this.autocomplete.current.value = '';
   }
 
-  onDragStart = index => (e) => {
+  onDragStart = memoize(index => (e) => {
     const { locations } = this.props;
     this.draggedItem = locations[index];
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', e.target.parentNode);
     e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
-  };
+  });
 
-  onDragOver = index => () => {
+  onDragOver = memoize(index => () => {
     const { locations, updateLocations } = this.props;
     const draggedOverItem = locations[index];
     if (this.draggedItem.id === draggedOverItem.id) {
@@ -49,7 +50,7 @@ export default class Waypoints extends PureComponent {
     const passedLocations = locations.filter(location => location.id !== this.draggedItem.id);
     const updatedLocations = update(passedLocations, { $splice: [[index, 0, this.draggedItem]] });
     updateLocations(updatedLocations);
-  };
+  });
 
   displayErrorMessage = () => {
     const { changeErrorMessageDisplay } = this.props;
@@ -88,10 +89,10 @@ export default class Waypoints extends PureComponent {
     });
   }
 
-  setLocationCenter = position => () => {
+  setLocationCenter = memoize(position => () => {
     const { map } = this.props;
     map.setCenter(position);
-  }
+  })
 
   render() {
     const { locations, isShowingError } = this.props;

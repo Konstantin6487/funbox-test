@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { flip, isEmpty, last } from 'lodash';
+import {
+  flip,
+  isEmpty,
+  last,
+  memoize,
+} from 'lodash';
 import {
   InfoWindow,
   Map,
@@ -17,6 +22,7 @@ const mapStateToProps = state => ({
   activeMarker: selectors.getActiveMarker(state),
   isShowingError: selectors.getIsShowingErrorProp(state),
   locations: selectors.locationsSelector(state),
+  positions: selectors.positionsSelector(state),
   selectedPlace: selectors.getSelectedPlace(state),
   showingInfoWindow: selectors.getShowingInfoWindow(state),
 });
@@ -38,7 +44,7 @@ class MapContainer extends Component {
     clickMarker({ name, position });
   }
 
-  onMarkerDragEnd = id => (coord) => {
+  onMarkerDragEnd = memoize(id => (coord) => {
     const { changeLocation, google } = this.props;
     const { latLng } = coord;
     const lat = latLng.lat();
@@ -57,7 +63,7 @@ class MapContainer extends Component {
         lng,
       });
     });
-  };
+  });
 
   render() {
     const {
@@ -67,6 +73,7 @@ class MapContainer extends Component {
       google,
       isShowingError,
       locations,
+      positions,
       removeLocation,
       selectedPlace,
       showingInfoWindow,
@@ -108,7 +115,8 @@ class MapContainer extends Component {
           updateLocations={updateLocations}
         />
         <Polyline
-          path={locations.map(item => item.position)}
+          geodesic
+          path={positions}
           options={{
             icons: [{
               icon: 'hello',
