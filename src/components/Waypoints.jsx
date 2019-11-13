@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import update from 'immutability-helper';
-import { memoize } from 'lodash';
+import memoize from 'lodash/memoize';
 
 import PointsList from './PointsList';
 

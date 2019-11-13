@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import {
-  flip,
-  isEmpty,
-  last,
-  memoize,
-} from 'lodash';
+import flip from 'lodash/flip';
+import isEmpty from 'lodash/isEmpty';
+import last from 'lodash/last';
+import memoize from 'lodash/memoize';
 import {
   InfoWindow,
   Map,

@@ -4,7 +4,7 @@ import {
   Form,
   InputGroup,
 } from 'react-bootstrap';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 
 const PointsList = (props) => {
   const {

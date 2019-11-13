@@ -1,11 +1,9 @@
 import { handleActions } from 'redux-actions';
-import {
-  isEmpty,
-  keyBy,
-  last,
-  max,
-  omit,
-} from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import keyBy from 'lodash/keyBy';
+import last from 'lodash/last';
+import max from 'lodash/max';
+import omit from 'lodash/omit';
 import { last as lastChar } from 'voca';
 import * as actions from '../actions';
 
