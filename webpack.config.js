@@ -1,42 +1,30 @@
-const webpack = require('webpack');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpackMerge = require('webpack-merge');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const template = require('html-webpack-template');
 
-module.exports = {
-  mode: process.env.NODE_ENV || 'development',
+const modeConfig = (env) => {
+  const getConfig = require(`./build-utils/webpack.${env.mode}`); // eslint-disable-line
+  return getConfig();
+};
+
+module.exports = ({ mode }) => webpackMerge({
+  mode,
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        test: /\.js$/,
         use: ['babel-loader'],
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
+        exclude: /node_modules/,
       },
     ],
   },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-  },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebPackPlugin({
-      template: './public/index.html',
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'style.css',
-    }),
-  ],
-  devServer: {
-    contentBase: './dist',
-    historyApiFallback: true,
-    hot: true,
-  },
-};
+  plugins: [new HtmlWebpackPlugin({
+    inject: false,
+    template,
+    appMountId: 'root',
+    title: 'Route editor',
+    minify: {
+      collapseWhitespace: true,
+    },
+  })],
+}, modeConfig({ mode }));
