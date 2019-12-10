@@ -1,14 +1,13 @@
 setup: install-deps
 
 start:
-	npm start
+	npm run dev
 
 install-deps:
 	npm ci
 
 build:
-	rm -rf dist
-	npm run build
+	npm run prod
 
 lint:
 	npx eslint . --ext .js --ext .jsx
