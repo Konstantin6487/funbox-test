@@ -4,7 +4,7 @@ import keyBy from 'lodash/keyBy';
 import last from 'lodash/last';
 import max from 'lodash/max';
 import omit from 'lodash/omit';
-import { last as lastChar } from 'voca';
+import lastChar from 'voca/last';
 import * as actions from '../actions';
 
 const initState = {
